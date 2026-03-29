@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KZToolBox 工具箱</title>
+  <link rel="icon" href="./res/favicon.ico" sizes="any" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="bg-orb bg-orb-left"></div>
+  <div class="bg-orb bg-orb-right"></div>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">
+          <img src="./res/icon.ico" alt="KZToolBox 图标" />
+        </div>
+        <div>
+          <h1>KZToolBox</h1>
+          <p>Windows 工具箱</p>
+        </div>
+      </div>
+      <nav class="category-nav" id="categoryNav"></nav>
+      <div class="sidebar-version" id="sidebarVersion" aria-label="版本信息"></div>
+    </aside>
+
+    <main class="workspace">
+      <header class="workspace-header">
+        <div>
+          <h2>聚合工具工作台</h2>
+        </div>
+        <div class="search-wrap">
+          <label for="toolSearch">搜索</label>
+          <input id="toolSearch" type="search" placeholder="搜索工具" />
+        </div>
+      </header>
+
+      <section class="overview-wrap">
+        <div class="overview-header">
+          <div>
+            <h3 id="overviewTitle">主页</h3>
+            <p id="overviewHint">固定常用工具，右键卡片可加入或移出主页。</p>
+          </div>
+        </div>
+        <section class="overview-grid" id="overviewGrid"></section>
+      </section>
+
+      <section class="panel-wrap">
+        <div class="panel-header">
+          <h3 id="panelTitle">请选择一个工具</h3>
+          <button id="resetBtn" class="ghost-btn">重置输入</button>
+        </div>
+        <div id="panelBody" class="panel-body"></div>
+      </section>
+    </main>
+  </div>
+
+  <template id="cardTemplate">
+    <button class="tool-card" type="button">
+      <div class="tool-card-top">
+        <span class="tool-card-category"></span>
+        <span class="tool-card-state"></span>
+      </div>
+      <h4 class="tool-card-title"></h4>
+      <p class="tool-card-desc"></p>
+    </button>
+  </template>
+
+  <div id="cardContextMenu" class="card-context-menu" hidden>
+    <button id="toggleFixedBtn" class="card-context-menu-item" type="button">固定到主页</button>
+  </div>
+
+  <script src="./app.js?v=20260329"></script>
+</body>
+</html>

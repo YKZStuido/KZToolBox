@@ -1,0 +1,41 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "KZToolBox",
+  "version": "0.1.0",
+  "identifier": "com.kzstudio.kztoolbox",
+  "build": {
+    "frontendDist": [
+      "../index.html",
+      "../styles.css",
+      "../app.js",
+      "../res/background1.png",
+      "../res/background2.png",
+      "../res/background3.png"
+    ]
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "KZToolBox",
+        "width": 1280,
+        "height": 860,
+        "minWidth": 1024,
+        "minHeight": 700,
+        "resizable": true,
+        "fullscreen": false,
+        "maximized": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": false,
+    "targets": "all",
+    "icon": [
+      "../res/icon.ico"
+    ]
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "KzToolBox",
+  "version": "0.1.0",
+  "description": "KZToolBox 工具箱",
+  "scripts": {
+    "tauri": "tauri",
+    "dev": "tauri dev",
+    "build": "tauri build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YKZStuido/KZToolBox.git"
+  },
+  "keywords": [],
+  "author": "亚柯洲",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/YKZStuido/KZToolBox/issues"
+  },
+  "homepage": "https://github.com/YKZStuido/KZToolBox#readme",
+  "dependencies": {
+    "@tauri-apps/api": "^2.10.1"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.10.1"
+  }
+}
