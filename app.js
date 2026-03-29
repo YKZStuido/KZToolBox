@@ -538,7 +538,6 @@ function renderHomePanel(container) {
       input.value = content;
       await renderPreview();
       updateStatus(isTauriRuntime() ? "已加载 notes.md" : "预览模式已加载", isTauriRuntime() ? "saved" : "fallback");
-      queueSave();
     })
     .catch(async (error) => {
       input.value = DEFAULT_NOTES_CONTENT;
@@ -690,9 +689,14 @@ function persistFixedToolIds(toolIds) {
 async function loadNotesContent() {
   if (isTauriRuntime()) {
     try {
-      const content = await invoke("read_notes_md");
-      if (typeof content === "string" && content.trim()) {
-        return content;
+      const result = await invoke("read_notes_md");
+      if (result && typeof result === "object") {
+        if (result.exists && typeof result.content === "string") {
+          return result.content;
+        }
+        if (result.exists === false) {
+          return DEFAULT_NOTES_CONTENT;
+        }
       }
     } catch (error) {
       console.warn("读取 notes.md 失败，改用本地暂存。", error);

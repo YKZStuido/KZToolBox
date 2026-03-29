@@ -1,6 +1,17 @@
-# KZToolBox（Tauri 桌面版示例）
+# KZToolBox 工具箱
 
-这是一个面向 Windows 10/11 的工具箱桌面应用原型，目前已完成前端界面与 Tauri 工程接入。
+这是一个面向 Windows 10/11 的工具箱桌面应用预览，目前已完成前端界面与 Tauri 工程接入。
+
+## 作者信息
+
+**Ya Kezhou**
+ - 主程序员，河南南阳某不知名初中生
+ - 联系方式：
+    - 微X `yakezhou0714`
+    - QQ  `1994023737`
+
+**OpenAI GPT5.4**
+ - 协助改 Bug，花了我 20$ 买的 Plus
 
 ## 已实现的系统能力（Tauri 模式）
 
@@ -33,7 +44,7 @@
 
 直接双击 `index.html` 即可预览界面。
 
-## 运行方式（Tauri 桌面版）
+## 编译方式（Tauri 桌面版）
 
 1. 安装 Rust 工具链（需要 `rustup`、`rustc`、`cargo`）：
    - https://rustup.rs/
@@ -41,12 +52,6 @@
    - `npm install`
 3. 启动桌面版：
    - `npm run dev`
-
-## 与参考代码的对应关系
-
-- 对应 `参考代码/windows/main.py` 的主界面结构：左侧功能导航 + 主显示区
-- 对应 `参考代码/windows/system.py` 的系统信息方向：硬件/网络/时间等入口
-- 本示例仅包含界面与交互原型，不包含真实 Windows 系统 API 调用
 
 ## 后续计划
 

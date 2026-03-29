@@ -8,6 +8,9 @@
       "../index.html",
       "../styles.css",
       "../app.js",
+      "../res/icon.ico",
+      "../res/icon-sidebar.png",
+      "../res/favicon.ico",
       "../res/background1.png",
       "../res/background2.png",
       "../res/background3.png"
@@ -32,8 +35,10 @@
     }
   },
   "bundle": {
-    "active": false,
-    "targets": "all",
+    "active": true,
+    "targets": [
+      "nsis"
+    ],
     "icon": [
       "../res/icon.ico"
     ]

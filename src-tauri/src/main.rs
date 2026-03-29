@@ -2,6 +2,7 @@
 
 use base64::engine::general_purpose::STANDARD as BASE64_STANDARD;
 use base64::Engine;
+use serde::Serialize;
 use serde_json::{json, Value};
 use std::fs;
 #[cfg(windows)]
@@ -9,6 +10,7 @@ use std::os::windows::process::CommandExt;
 use std::path::PathBuf;
 use std::process::{Command, Stdio};
 use std::time::{Duration, Instant};
+use tauri::{AppHandle, Manager};
 
 #[cfg(windows)]
 const CREATE_NO_WINDOW: u32 = 0x08000000;
@@ -137,12 +139,38 @@ fn collect_msinfo_report() -> String {
     command.args(["/report", &path_text]);
     apply_windows_hidden_flags(&mut command);
 
-    let output = command.output();
-
-    let output = match output {
+    let mut child = match command.spawn() {
         Ok(result) => result,
         Err(error) => {
             return format!("执行 msinfo32 失败: {error}");
+        }
+    };
+
+    let start = Instant::now();
+    loop {
+        match child.try_wait() {
+            Ok(Some(_)) => break,
+            Ok(None) => {
+                if start.elapsed() >= Duration::from_millis(120_000) {
+                    let _ = child.kill();
+                    let _ = child.wait();
+                    let _ = fs::remove_file(&temp_path);
+                    return "执行 msinfo32 超时（>120000ms）".to_string();
+                }
+                std::thread::sleep(Duration::from_millis(100));
+            }
+            Err(error) => {
+                let _ = fs::remove_file(&temp_path);
+                return format!("等待 msinfo32 结果失败: {error}");
+            }
+        }
+    }
+
+    let output = match child.wait_with_output() {
+        Ok(result) => result,
+        Err(error) => {
+            let _ = fs::remove_file(&temp_path);
+            return format!("读取 msinfo32 输出失败: {error}");
         }
     };
 
@@ -167,6 +195,12 @@ fn collect_msinfo_report() -> String {
 
     let _ = fs::remove_file(&temp_path);
     content
+}
+
+#[derive(Serialize)]
+struct NotesReadResult {
+    exists: bool,
+    content: String,
 }
 
 #[tauri::command]
@@ -507,26 +541,35 @@ fn save_png_to_desktop(file_name: &str, base64_data: &str) -> Result<String, Str
     Ok(target.to_string_lossy().to_string())
 }
 
-fn resolve_notes_path() -> Result<PathBuf, String> {
-    let manifest_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-    let repo_root = manifest_dir
-        .parent()
-        .ok_or_else(|| "无法确定项目根目录。".to_string())?;
-    Ok(repo_root.join("notes.md"))
+fn resolve_notes_path(app: &AppHandle) -> Result<PathBuf, String> {
+    let app_data_dir = app
+        .path()
+        .app_data_dir()
+        .map_err(|error| format!("确定应用数据目录失败: {error}"))?;
+    fs::create_dir_all(&app_data_dir).map_err(|error| format!("创建应用数据目录失败: {error}"))?;
+    Ok(app_data_dir.join("notes.md"))
 }
 
 #[tauri::command]
-fn read_notes_md() -> Result<String, String> {
-    let notes_path = resolve_notes_path()?;
+fn read_notes_md(app: AppHandle) -> Result<NotesReadResult, String> {
+    let notes_path = resolve_notes_path(&app)?;
     if !notes_path.exists() {
-        return Ok(String::new());
+        return Ok(NotesReadResult {
+            exists: false,
+            content: String::new(),
+        });
     }
-    fs::read_to_string(&notes_path).map_err(|error| format!("读取 notes.md 失败: {error}"))
+    let content =
+        fs::read_to_string(&notes_path).map_err(|error| format!("读取 notes.md 失败: {error}"))?;
+    Ok(NotesReadResult {
+        exists: true,
+        content,
+    })
 }
 
 #[tauri::command]
-fn write_notes_md(content: &str) -> Result<String, String> {
-    let notes_path = resolve_notes_path()?;
+fn write_notes_md(app: AppHandle, content: &str) -> Result<String, String> {
+    let notes_path = resolve_notes_path(&app)?;
     fs::write(&notes_path, content).map_err(|error| format!("写入 notes.md 失败: {error}"))?;
     Ok(notes_path.to_string_lossy().to_string())
 }
