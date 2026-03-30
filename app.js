@@ -1,9 +1,10 @@
 const HOME_CATEGORY = "主页";
 const FIXED_LIST_STORAGE_KEY = "fixed_list";
 const NOTES_STORAGE_KEY = "notes_md_preview";
-const APP_VERSION_DISPLAY = ["0.1.0", "preview", "build1"];
+// const APP_VERSION_DISPLAY = ["0.1.0", "preview", "build1"];
+const APP_VERSION_DISPLAY = ["0.2.0 preview", "build2", "https://github.com/YKZStuido/KZToolBox"];
 const DEFAULT_FIXED_TOOL_IDS = ["system-overview", "network-check", "text-stats"];
-const DEFAULT_NOTES_CONTENT = "# 笔记\n\n在这里记录常用命令、排查结论或待办事项。\n\n- 支持 Markdown 标题\n- 支持列表与引用\n- 支持代码块\n\n> 主页会自动保存到 notes.md。";
+const DEFAULT_NOTES_CONTENT = "# 笔记\n\n在这里记录常用命令、排查结论或待办事项。\n\n注意：本软件在使用需要检测电脑信息的功能时，可能需要杀毒软件放行。\n开源软件：https://github.com/YKZStuido/KZToolBox";
 
 const categories = [
   HOME_CATEGORY,
